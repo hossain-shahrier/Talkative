@@ -138,7 +138,7 @@ const Login = () => {
         message: "*Invalid email address.",
       });
     } else {
-      history.push("/dashboard");
+      history.push("/rooms");
     }
   };
   return (
@@ -184,7 +184,10 @@ const Login = () => {
             </LoginButton>
             <Register>
               Does't have an account?
-              <NavLink to="/" style={{ color: "#1C5D99", marginLeft: "5px" }}>
+              <NavLink
+                to="/register"
+                style={{ color: "#1C5D99", marginLeft: "5px" }}
+              >
                 Register
               </NavLink>
             </Register>
