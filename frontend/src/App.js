@@ -9,7 +9,7 @@ import {
 } from "react-router-dom";
 import Login from "./pages/Login/Login";
 import Activate from "./pages/activate/Activate";
-// import Auth from "./pages/authenticate/Auth";
+import Rooms from "./pages/rooms/Rooms";
 const isAuth = true;
 const user = {
   activated: true,
@@ -20,7 +20,7 @@ function App() {
       <Router>
         <Navigation />
         <Switch>
-        {/* Guest */}
+          {/* Guest */}
           <GuestRoute path="/" exact>
             <Login />
           </GuestRoute>
@@ -31,7 +31,10 @@ function App() {
           <SemiProtectedRoute path="/activate" exact>
             <Activate />
           </SemiProtectedRoute>
-
+          {/* Protected */}
+          <ProtectedRoute path="/rooms" exact>
+            <Rooms />
+          </ProtectedRoute>
         </Switch>
       </Router>
     </div>
@@ -64,7 +67,7 @@ const SemiProtectedRoute = ({ children, ...rest }) => {
         !isAuth ? (
           <Redirect
             to={{
-              pathname: "/register",
+              pathname: "/",
               state: { from: location },
             }}
           />
@@ -77,6 +80,32 @@ const SemiProtectedRoute = ({ children, ...rest }) => {
               state: { from: location },
             }}
           />
+        )
+      }
+    ></Route>
+  );
+};
+const ProtectedRoute = ({ children, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        !isAuth ? (
+          <Redirect
+            to={{
+              pathname: "/",
+              state: { from: location },
+            }}
+          />
+        ) : isAuth && !user.activated ? (
+          <Redirect
+            to={{
+              pathname: "/activate",
+              state: { from: location },
+            }}
+          />
+        ) : (
+          children
         )
       }
     ></Route>
