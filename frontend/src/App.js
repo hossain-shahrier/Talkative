@@ -10,7 +10,7 @@ import {
 import Login from "./pages/Login/Login";
 import Activate from "./pages/activate/Activate";
 import Rooms from "./pages/rooms/Rooms";
-const isAuth = true;
+const isAuth = false;
 const user = {
   activated: true,
 };
@@ -93,7 +93,7 @@ const ProtectedRoute = ({ children, ...rest }) => {
         !isAuth ? (
           <Redirect
             to={{
-              pathname: "/",
+              pathname: "/register",
               state: { from: location },
             }}
           />
