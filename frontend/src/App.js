@@ -10,6 +10,7 @@ import {
 import Login from "./pages/Login/Login";
 import Activate from "./pages/activate/Activate";
 import Rooms from "./pages/rooms/Rooms";
+import Auth from "./pages/authenticate/Auth";
 const isAuth = false;
 const user = {
   activated: true,
@@ -26,6 +27,9 @@ function App() {
           </GuestRoute>
           <GuestRoute path="/register" exact>
             <Register />
+          </GuestRoute>
+          <GuestRoute path="/authenticate" exact>
+            <Auth />
           </GuestRoute>
           {/* Semi-Protected */}
           <SemiProtectedRoute path="/activate" exact>
