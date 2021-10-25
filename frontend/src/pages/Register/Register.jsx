@@ -206,7 +206,7 @@ const Register = () => {
               type="submit"
               onClick={(e) => handleSubmit(e)}
             >
-              Register
+              Next
             </RegistrationButton>
             <Login>
               Already have an account?
