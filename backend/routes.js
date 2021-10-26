@@ -1,8 +1,8 @@
+// Initializing Router from Express
 const router = require("express").Router();
-
-router.post("/api/send-otp", (req, res) => {
-  // Logic
-  res.send("Hello from OTP route");
-});
+// Controllers
+const AuthController = require("./controllers/AuthController");
+//Routes
+router.post("/api/send-otp", AuthController.sendOTP);
 
 module.exports = router;
