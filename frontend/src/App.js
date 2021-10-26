@@ -11,6 +11,8 @@ import Login from "./pages/Login/Login";
 import Activate from "./pages/activate/Activate";
 import Rooms from "./pages/rooms/Rooms";
 import Auth from "./pages/authenticate/Auth";
+
+const isRegistered = false;
 const isAuth = false;
 const user = {
   activated: true,
@@ -28,9 +30,10 @@ function App() {
           <GuestRoute path="/register" exact>
             <Register />
           </GuestRoute>
-          <GuestRoute path="/authenticate" exact>
+          {/* Registered */}
+          <RegisteredRoute path="/authenticate" exact>
             <Auth />
-          </GuestRoute>
+          </RegisteredRoute>
           {/* Semi-Protected */}
           <SemiProtectedRoute path="/activate" exact>
             <Activate />
@@ -58,6 +61,25 @@ const GuestRoute = ({ children, ...rest }) => {
           />
         ) : (
           children
+        )
+      }
+    ></Route>
+  );
+};
+const RegisteredRoute = ({ children, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        isRegistered ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/register",
+              state: { from: location },
+            }}
+          />
         )
       }
     ></Route>
