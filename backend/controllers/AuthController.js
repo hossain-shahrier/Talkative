@@ -1,4 +1,5 @@
 // Service
+const HashService = require("../services/HashService");
 const OtpService = require("../services/OtpService");
 class AuthController {
   async sendOTP(req, res) {
@@ -10,8 +11,13 @@ class AuthController {
     }
     // Random OTP generate using OTP Service
     const otp = await OtpService.generateOTP();
+    // Hashing generated OTP
+    const ttl = 1000 * 180;
+    const expires = Date.now() + ttl;
+    const data = `${phone}.${otp}.${expires}`;
+    const hash = HashService.hashOTP(data);
 
-    res.json({ otp: otp });
+    res.json({ hash: hash });
   }
 }
 module.exports = new AuthController();
