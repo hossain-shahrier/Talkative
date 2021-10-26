@@ -2,6 +2,8 @@ const crypto = require("crypto");
 const {
   PhoneNumberContext,
 } = require("twilio/lib/rest/lookups/v1/phoneNumber");
+const HashService = require("./HashService");
+const { hashOTP } = require("./HashService");
 
 const smsid = process.env.SMS_SID;
 const smsAuthToken = process.env.SMS_AUTH_TOKEN;
@@ -18,11 +20,17 @@ class OTPService {
     return await twilio.messages.create({
       to: phone,
       from: process.env.SMS_FROM_NUMBER,
-      body: `Your OTP Number is ${otp}`,
+      body: `Your Talketive OTP Number is ${otp}`,
     });
   }
 
-  verifyOtp() {}
+  verifyOtp(hashedOTP, data) {
+    let computedHash = HashService.hashOTP(data);
+    if (computedHash === hashedOTP) {
+      return true;
+    }
+    return false;
+  }
 }
 
 module.exports = new OTPService();
