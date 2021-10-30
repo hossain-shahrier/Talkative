@@ -143,6 +143,7 @@ const Register = () => {
       });
     } else {
       const res = await sendOTP({ phone: inputs.phone_number });
+      console.log(res);
 
       // history.push("/rooms");
     }
