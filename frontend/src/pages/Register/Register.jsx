@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { NavLink, useHistory } from "react-router-dom";
 import tw from "twin.macro";
 import { useState } from "react";
-
+import { sendOTP } from "../../http";
 const Container = styled.div`
   font-family: "Open Sans", sans-serif;
   display: flex;
@@ -116,7 +116,7 @@ const Register = () => {
   const ref =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (
@@ -137,16 +137,15 @@ const Register = () => {
       setErrorMessage({
         message: "*Phone number can not be less than Eleven letters.",
       });
-    } else if (inputs.phone_number.length > 11) {
-      setErrorMessage({
-        message: "*Phone number can not be more than Eleven letters.",
-      });
     } else if (ref.test(inputs.email) === false) {
       setErrorMessage({
         message: "*Invalid email address.",
       });
     } else {
-      history.push("/rooms");
+      const res = await sendOTP({ phone: inputs.phone_number });
+      console.log(res);
+
+      // history.push("/rooms");
     }
   };
   return (
@@ -192,7 +191,7 @@ const Register = () => {
               <InputSpan>Phone number</InputSpan>
               <Input
                 style={{ position: "relative" }}
-                type="number"
+                type="text"
                 name="phone_number"
                 placeholder="Enter your phone number"
                 onChange={(e) => handleChange(e)}
