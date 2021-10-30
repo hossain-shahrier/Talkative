@@ -1,9 +1,6 @@
 const crypto = require("crypto");
-const {
-  PhoneNumberContext,
-} = require("twilio/lib/rest/lookups/v1/phoneNumber");
 const HashService = require("./HashService");
-const { hashOTP } = require("./HashService");
+require("dotenv").config();
 
 const smsid = process.env.SMS_SID;
 const smsAuthToken = process.env.SMS_AUTH_TOKEN;
