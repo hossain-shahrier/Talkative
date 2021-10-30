@@ -1,4 +1,6 @@
 const crypto = require("crypto");
+require("dotenv").config();
+
 class HashService {
   hashOTP(data) {
     const hashData = crypto
