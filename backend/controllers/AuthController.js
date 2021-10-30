@@ -1,6 +1,7 @@
 // Service
 const HashService = require("../services/HashService");
 const OtpService = require("../services/OtpService");
+const TokenService = require("../services/TokenService");
 const UserService = require("../services/UserService");
 class AuthController {
   async sendOTP(req, res) {
@@ -46,21 +47,28 @@ class AuthController {
       } else {
         // Database Service
         let user;
-        let accessToken;
-        let refreshToken;
+
         try {
           user = await UserService.findUser({ phone });
           if (!user) {
             user = UserService.createUser({ username, email, password, phone });
-            res.status(200).json({ message: "A new user created" });
           } else {
             res.status(400).json({ message: "User already registered" });
           }
         } catch (err) {
           console.log(err);
-          res.status(500);
+          res.status(500).json({ message: "Db error" });
         }
-        // Token
+        const { accessToken, refreshToken } = TokenService.generateTokens({
+          _id: user._id,
+          activated: false,
+        });
+
+        res.cookie("refreshToken", refreshToken, {
+          maxAge: 1000 * 60 * 60 * 24 * 30,
+          httpOnly: true,
+        });
+        res.json({ accessToken });
       }
     }
   }
