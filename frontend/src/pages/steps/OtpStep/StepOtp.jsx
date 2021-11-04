@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
-
+import { verifyOTP } from "../../../http";
+import { useSelector } from "react-redux";
 const Container = styled.div``;
 
 const LeftContainer = styled.div`
@@ -38,6 +39,22 @@ const RightContainer = styled.div``;
 
 const StepOtp = ({ onNext }) => {
   const [otp, setOtp] = useState("");
+  const { username, email, password, phone, hash } = useSelector(
+    (state) => state.auth.otp
+  );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await verifyOTP({
+        otp,
+        phone,
+        hash,
+      });
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Container>
       <LeftContainer>
@@ -50,7 +67,7 @@ const StepOtp = ({ onNext }) => {
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
         />
-        <Button onClick={onNext}>Next</Button>
+        <Button onClick={(e) => handleSubmit(e)}>Next</Button>
         <BottomParagraph>
           By entering your number, you're agreeing to our Terms of Service and
           Privacy Policy.

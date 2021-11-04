@@ -2,7 +2,9 @@ import styled from "styled-components";
 import { NavLink, useHistory } from "react-router-dom";
 import tw from "twin.macro";
 import { useState } from "react";
-import { sendOTP } from "../../http";
+import { register } from "../../http";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuth, setOTP } from "../../store/authSlice";
 const Container = styled.div`
   font-family: "Open Sans", sans-serif;
   display: flex;
@@ -93,6 +95,8 @@ const RightContainerImage = styled.img`
 `;
 
 const Register = () => {
+  // Redux
+  const dispatch = useDispatch();
   // Form Handling
   const history = useHistory();
   const [errorMessage, setErrorMessage] = useState({
@@ -142,10 +146,14 @@ const Register = () => {
         message: "*Invalid email address.",
       });
     } else {
-      const res = await sendOTP({ phone: inputs.phone_number });
-      console.log(res);
-
-      // history.push("/rooms");
+      const { data } = await register({
+        username: inputs.username,
+        password: inputs.password,
+        email: inputs.email,
+        phone: inputs.phone_number,
+      });
+      console.log(data);
+      history.push("/rooms");
     }
   };
   return (

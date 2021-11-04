@@ -12,7 +12,7 @@ import Activate from "./pages/activate/Activate";
 import Rooms from "./pages/rooms/Rooms";
 import Auth from "./pages/authenticate/Auth";
 
-const isRegistered = false;
+const isRegistered = true;
 const isAuth = false;
 const user = {
   activated: true,
