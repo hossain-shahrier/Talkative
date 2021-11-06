@@ -12,11 +12,12 @@ import Activate from "./pages/activate/Activate";
 import Rooms from "./pages/rooms/Rooms";
 import Auth from "./pages/authenticate/Auth";
 
-const isRegistered = true;
-const isAuth = false;
-const user = {
-  activated: true,
-};
+import { useSelector } from "react-redux";
+// const isRegistered = false;
+// const isAuth = false;
+// const user = {
+//   activated: true,
+// };
 function App() {
   return (
     <div className="container">
@@ -48,6 +49,7 @@ function App() {
   );
 }
 const GuestRoute = ({ children, ...rest }) => {
+  const { isAuth } = useSelector((state) => state.auth);
   return (
     <Route
       {...rest}
@@ -67,6 +69,8 @@ const GuestRoute = ({ children, ...rest }) => {
   );
 };
 const RegisteredRoute = ({ children, ...rest }) => {
+  const { isRegistered } = useSelector((state) => state.auth);
+  console.log(isRegistered);
   return (
     <Route
       {...rest}
@@ -86,6 +90,7 @@ const RegisteredRoute = ({ children, ...rest }) => {
   );
 };
 const SemiProtectedRoute = ({ children, ...rest }) => {
+  const { isAuth, user } = useSelector((state) => state.auth);
   return (
     <Route
       {...rest}
@@ -112,6 +117,7 @@ const SemiProtectedRoute = ({ children, ...rest }) => {
   );
 };
 const ProtectedRoute = ({ children, ...rest }) => {
+  const { isAuth, user } = useSelector((state) => state.auth);
   return (
     <Route
       {...rest}

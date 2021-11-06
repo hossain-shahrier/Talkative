@@ -4,7 +4,7 @@ import tw from "twin.macro";
 import { useState } from "react";
 import { register } from "../../http";
 import { useDispatch, useSelector } from "react-redux";
-import { setAuth, setOTP } from "../../store/authSlice";
+import { setAuth, setOTP, setPhone } from "../../store/authSlice";
 const Container = styled.div`
   font-family: "Open Sans", sans-serif;
   display: flex;
@@ -153,7 +153,8 @@ const Register = () => {
         phone: inputs.phone_number,
       });
       console.log(data);
-      history.push("/rooms");
+      history.push("/authenticate");
+      dispatch(setPhone({ phone: data.phone }));
     }
   };
   return (

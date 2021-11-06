@@ -82,15 +82,17 @@ class AuthController {
       user = await UserService.findUser({ phone });
       if (!user) {
         user = UserService.createUser({ username, email, password, phone });
+        res.status(200).json({
+          message: "User registered",
+          user: { username, email, password, phone },
+        });
       } else {
         res.status(400).json({ message: "User already registered" });
       }
     } catch (err) {
       console.log(err);
-      res.status(500).json({ message: "Db error" });
+      res.status(500).json({ message: "Database error" });
     }
-
-    res.json({ message: "User registered" });
   }
 }
 module.exports = new AuthController();
