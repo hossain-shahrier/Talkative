@@ -33,9 +33,9 @@ class AuthController {
   }
   async verifyOTP(req, res) {
     const { otp, hash, phone, username, email, password } = req.body;
-    // if (!otp || !hash || !phone) {
-    //   res.status(400).json({ message: "All fields required" });
-    // }
+    if (!otp || !hash || !phone) {
+      res.status(400).json({ message: "All fields required" });
+    }
     const [hashedOTP, expires] = hash.split(".");
     if (Date.now() > +expires) {
       res.status(400).json({ message: "OTP expired" });
@@ -47,7 +47,6 @@ class AuthController {
       } else {
         // Database Service
         let user;
-
         try {
           user = await UserService.findUser({ phone });
           if (!user) {

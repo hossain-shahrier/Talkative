@@ -146,12 +146,6 @@ const Register = () => {
         message: "*Invalid email address.",
       });
     } else {
-      // const { data } = await register({
-      //   username: inputs.username,
-      //   password: inputs.password,
-      //   email: inputs.email,
-      //   phone: inputs.phone_number,
-      // });
       dispatch(
         setUser({
           username: inputs.username,
@@ -161,7 +155,7 @@ const Register = () => {
         })
       );
       const { data } = await sendOTP({ phone: inputs.phone_number });
-      console.log(data);
+      dispatch(setOTP({ hash: data.hash }));
       history.push("/authenticate");
     }
   };

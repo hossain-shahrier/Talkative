@@ -1,6 +1,6 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { verifyOTP } from "../../../http";
+import { verifyOTP, register } from "../../../http";
 import { useSelector } from "react-redux";
 const Container = styled.div``;
 
@@ -23,6 +23,12 @@ const OTPInput = styled.input`
   }
   margin-bottom: 10px;
 `;
+const Error = styled.span`
+  font-size: 12px;
+  font-family: "Lora", serif;
+  letter-spacing: 1px;
+  color: red;
+`;
 const BottomParagraph = styled.span``;
 const Button = styled.button`
   background-color: #639fab;
@@ -39,20 +45,37 @@ const RightContainer = styled.div``;
 
 const StepOtp = ({ onNext }) => {
   const [otp, setOtp] = useState("");
-  const { phone, hash } = useSelector(
-    (state) => state.auth.otp
+  const [errorMessage, setErrorMessage] = useState({
+    message: "",
+  });
+  const { phone, username, email, password } = useSelector(
+    (state) => state.auth.user
   );
+  const { hash } = useSelector((state) => state.auth.otp);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const { data } = await verifyOTP({
-        otp,
-        phone,
-        hash,
+    if (otp.length === 0) {
+      setErrorMessage({
+        message: "OTP is required",
       });
-      console.log(data);
-    } catch (err) {
-      console.log(err);
+    } else {
+      try {
+        const { data } = await verifyOTP({
+          otp,
+          phone,
+          hash,
+        });
+        if (data.accessToken) {
+          register({
+            username,
+            email,
+            password,
+            phone,
+          });
+        }
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
   return (
@@ -63,10 +86,13 @@ const StepOtp = ({ onNext }) => {
         </LeftContainerTitle>
         <OTPInput
           type="number"
+          name="otp"
+          autoFocus
           placeholder="Enter your OTP number"
           value={otp}
           onChange={(e) => setOtp(e.target.value)}
         />
+        <Error>{errorMessage.message}</Error>
         <Button onClick={(e) => handleSubmit(e)}>Next</Button>
         <BottomParagraph>
           By entering your number, you're agreeing to our Terms of Service and
