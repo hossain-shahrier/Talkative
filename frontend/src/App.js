@@ -13,11 +13,7 @@ import Rooms from "./pages/rooms/Rooms";
 import Auth from "./pages/authenticate/Auth";
 
 import { useSelector } from "react-redux";
-// const isRegistered = false;
-// const isAuth = false;
-// const user = {
-//   activated: true,
-// };
+
 function App() {
   return (
     <div className="container">
@@ -70,7 +66,7 @@ const GuestRoute = ({ children, ...rest }) => {
 };
 const RegisteredRoute = ({ children, ...rest }) => {
   const { isRegistered } = useSelector((state) => state.auth);
-  console.log(isRegistered);
+
   return (
     <Route
       {...rest}

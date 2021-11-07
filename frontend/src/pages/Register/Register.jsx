@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { NavLink, useHistory } from "react-router-dom";
 import tw from "twin.macro";
-import { useState } from "react";
-import { register } from "../../http";
+import { useEffect, useState } from "react";
+import { sendOTP } from "../../http";
 import { useDispatch, useSelector } from "react-redux";
-import { setAuth, setOTP, setPhone } from "../../store/authSlice";
+import { setUser, setAuth, setOTP, setPhone } from "../../store/authSlice";
 const Container = styled.div`
   font-family: "Open Sans", sans-serif;
   display: flex;
@@ -146,15 +146,23 @@ const Register = () => {
         message: "*Invalid email address.",
       });
     } else {
-      const { data } = await register({
-        username: inputs.username,
-        password: inputs.password,
-        email: inputs.email,
-        phone: inputs.phone_number,
-      });
+      // const { data } = await register({
+      //   username: inputs.username,
+      //   password: inputs.password,
+      //   email: inputs.email,
+      //   phone: inputs.phone_number,
+      // });
+      dispatch(
+        setUser({
+          username: inputs.username,
+          password: inputs.password,
+          email: inputs.email,
+          phone: inputs.phone_number,
+        })
+      );
+      const { data } = await sendOTP({ phone: inputs.phone_number });
       console.log(data);
       history.push("/authenticate");
-      dispatch(setPhone({ phone: data.phone }));
     }
   };
   return (

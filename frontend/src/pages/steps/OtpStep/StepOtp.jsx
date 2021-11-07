@@ -39,7 +39,7 @@ const RightContainer = styled.div``;
 
 const StepOtp = ({ onNext }) => {
   const [otp, setOtp] = useState("");
-  const { username, email, password, phone, hash } = useSelector(
+  const { phone, hash } = useSelector(
     (state) => state.auth.otp
   );
   const handleSubmit = async (e) => {

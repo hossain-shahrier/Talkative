@@ -5,13 +5,26 @@ export const authSlice = createSlice({
   initialState: {
     isAuth: false,
     isRegistered: false,
-    user: null,
+    user: {
+      username: "",
+      password: "",
+      email: "",
+      phone: "",
+    },
     otp: {
       phone: "",
       hash: "",
     },
   },
   reducers: {
+    setUser: (state, action) => {
+      const { username, password, email, phone } = action.payload;
+      state.user.username = username;
+      state.user.password = password;
+      state.user.email = email;
+      state.user.phone = phone;
+      state.isRegistered = true;
+    },
     setAuth: (state, action) => {
       const { user } = action.payload;
       state.user = user;
@@ -23,12 +36,13 @@ export const authSlice = createSlice({
       state.otp.phone = phone;
       state.otp.hash = hash;
     },
-    setPhone: (state) => {
-      state.isRegistered = true;
+    setPhone: (state, action) => {
+      const { phone } = action.payload;
+      state.otp.phone = phone;
     },
   },
 });
 
-export const { setAuth, setOTP, setPhone } = authSlice.actions;
+export const { setUser, setAuth, setOTP, setPhone } = authSlice.actions;
 
 export default authSlice.reducer;
