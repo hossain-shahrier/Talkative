@@ -60,19 +60,23 @@ const StepOtp = ({ onNext }) => {
       });
     } else {
       try {
-        const { data } = await verifyOTP({
+        await verifyOTP({
           otp,
           phone,
           hash,
-        });
-        if (data.accessToken) {
-          register({
-            username,
-            email,
-            password,
-            phone,
-          });
-        }
+        }).then((res) => console.log("sorry"));
+        // if (data.accessToken) {
+        //   await register({
+        //     username,
+        //     email,
+        //     password,
+        //     phone,
+        //   });
+        // } else {
+        //   setErrorMessage({
+        //     message: data.message,
+        //   });
+        // }
       } catch (err) {
         console.log(err);
       }
