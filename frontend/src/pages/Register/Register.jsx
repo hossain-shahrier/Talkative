@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { NavLink, useHistory } from "react-router-dom";
 import tw from "twin.macro";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { sendOTP } from "../../http";
-import { useDispatch, useSelector } from "react-redux";
-import { setUser, setAuth, setOTP, setPhone } from "../../store/authSlice";
+import { useDispatch } from "react-redux";
+import { setUser, setOTP } from "../../store/authSlice";
 const Container = styled.div`
   font-family: "Open Sans", sans-serif;
   display: flex;
@@ -154,9 +154,16 @@ const Register = () => {
           phone: inputs.phone_number,
         })
       );
-      const { data } = await sendOTP({ phone: inputs.phone_number });
-      dispatch(setOTP({ hash: data.hash }));
-      history.push("/authenticate");
+      await sendOTP({ phone: inputs.phone_number })
+        .then((data) => {
+          dispatch(setOTP({ hash: data.data.hash }));
+          history.push("/authenticate");
+        })
+        .catch((err) => {
+          setErrorMessage({
+            message: err.response.data.message,
+          });
+        });
     }
   };
   return (

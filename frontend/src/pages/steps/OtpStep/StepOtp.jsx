@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
+
 import styled from "styled-components";
-import { verifyOTP, register } from "../../../http";
+import { verifyOTP } from "../../../http";
 import { useSelector } from "react-redux";
 const Container = styled.div``;
 
@@ -48,6 +50,7 @@ const StepOtp = ({ onNext }) => {
   const [errorMessage, setErrorMessage] = useState({
     message: "",
   });
+  const history = useHistory();
   const { phone, username, email, password } = useSelector(
     (state) => state.auth.user
   );
@@ -59,27 +62,22 @@ const StepOtp = ({ onNext }) => {
         message: "OTP is required",
       });
     } else {
-      try {
-        await verifyOTP({
-          otp,
-          phone,
-          hash,
-        }).then((res) => console.log("sorry"));
-        // if (data.accessToken) {
-        //   await register({
-        //     username,
-        //     email,
-        //     password,
-        //     phone,
-        //   });
-        // } else {
-        //   setErrorMessage({
-        //     message: data.message,
-        //   });
-        // }
-      } catch (err) {
-        console.log(err);
-      }
+      await verifyOTP({
+        otp,
+        phone,
+        username,
+        email,
+        password,
+        hash,
+      })
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((err) => {
+          setErrorMessage({
+            message: err.response.data.message,
+          });
+        });
     }
   };
   return (
