@@ -33,7 +33,7 @@ class AuthController {
   }
   async verifyOTP(req, res) {
     const { otp, hash, phone, username, email, password } = req.body;
-    if (!otp || !hash || !phone || !username || !email || !password) {
+    if (!otp || !hash || !phone) {
       res.status(400).json({ message: "All fields required" });
     }
     const [hashedOTP, expires] = hash.split(".");
@@ -47,7 +47,6 @@ class AuthController {
       } else {
         // Database Service
         let user;
-
         try {
           user = await UserService.findUser({ phone });
           if (!user) {
@@ -70,6 +69,28 @@ class AuthController {
         });
         res.json({ accessToken });
       }
+    }
+  }
+  async register(req, res) {
+    const { username, email, password, phone } = req.body;
+    if (!username || !email || !password || !phone) {
+      res.status(400).json({ message: "All fields required" });
+    }
+    let user;
+    try {
+      user = await UserService.findUser({ phone });
+      if (!user) {
+        user = UserService.createUser({ username, email, password, phone });
+        res.status(200).json({
+          message: "User registered",
+          user: { username, email, password, phone },
+        });
+      } else {
+        res.status(400).json({ message: "User already registered" });
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: "Database error" });
     }
   }
 }
