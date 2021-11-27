@@ -17,7 +17,7 @@ class OTPService {
     return await twilio.messages.create({
       to: phone,
       from: process.env.SMS_FROM_NUMBER,
-      body: `Your Talketive OTP Number is ${otp}`,
+      body: `Your Talketive OTP Number is :${otp}`,
     });
   }
 

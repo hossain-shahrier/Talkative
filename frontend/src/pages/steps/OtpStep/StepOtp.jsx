@@ -75,11 +75,10 @@ const StepOtp = () => {
         password,
         hash,
       })
-        .then((data) => {
+        .then(() => {
           try {
             activate({ username, email, phone })
               .then((user) => {
-                console.log(user);
                 dispatch(setAuth(user));
                 history.push("/rooms");
               })
