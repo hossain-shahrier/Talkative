@@ -6,7 +6,7 @@ class TokenService {
   // Generate Access and Refresh Token
   generateTokens(payload) {
     const accessToken = jwt.sign(payload, accessTokenSecret, {
-      expiresIn: "1h",
+      expiresIn: "1m",
     });
     const refreshToken = jwt.sign(payload, refreshTokenSecret, {
       expiresIn: "1y",
@@ -28,7 +28,7 @@ class TokenService {
   async findRefreshToken(userId, refreshToken) {
     return await refreshModel.findOne({
       where: {
-        _id: userId,
+        userId: userId,
         token: refreshToken,
       },
     });
