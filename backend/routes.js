@@ -9,6 +9,7 @@ router.post("/api/register", AuthController.register);
 router.post("/api/send-otp", AuthController.sendOTP);
 router.post("/api/verify-otp", AuthController.verifyOTP);
 router.post("/api/activate", authMiddleware, ActivateController.activate);
+router.post("/api/refresh",  AuthController.refresh);
 
 module.exports = router;
 // End of file routes.js
