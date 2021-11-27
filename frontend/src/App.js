@@ -8,7 +8,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import Login from "./pages/Login/Login";
-import Activate from "./pages/activate/Activate";
+// import Activate from "./pages/activate/Activate";
 import Rooms from "./pages/rooms/Rooms";
 import Auth from "./pages/authenticate/Auth";
 
@@ -32,9 +32,9 @@ function App() {
             <Auth />
           </RegisteredRoute>
           {/* Semi-Protected */}
-          <SemiProtectedRoute path="/activate" exact>
+          {/* <SemiProtectedRoute path="/activate" exact>
             <Activate />
-          </SemiProtectedRoute>
+          </SemiProtectedRoute> */}
           {/* Protected */}
           <ProtectedRoute path="/rooms" exact>
             <Rooms />
@@ -85,35 +85,35 @@ const RegisteredRoute = ({ children, ...rest }) => {
     ></Route>
   );
 };
-const SemiProtectedRoute = ({ children, ...rest }) => {
-  const { isAuth, user } = useSelector((state) => state.auth);
-  return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        !isAuth ? (
-          <Redirect
-            to={{
-              pathname: "/",
-              state: { from: location },
-            }}
-          />
-        ) : isAuth && !user.activated ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: "/rooms",
-              state: { from: location },
-            }}
-          />
-        )
-      }
-    ></Route>
-  );
-};
+// const SemiProtectedRoute = ({ children, ...rest }) => {
+//   const { activatedUser, isAuth } = useSelector((state) => state.auth);
+//   return (
+//     <Route
+//       {...rest}
+//       render={({ location }) =>
+//         !isAuth ? (
+//           <Redirect
+//             to={{
+//               pathname: "/register",
+//               state: { from: location },
+//             }}
+//           />
+//         ) : isAuth && !activatedUser.activated ? (
+//           children
+//         ) : (
+//           <Redirect
+//             to={{
+//               pathname: "/rooms",
+//               state: { from: location },
+//             }}
+//           />
+//         )
+//       }
+//     ></Route>
+//   );
+// };
 const ProtectedRoute = ({ children, ...rest }) => {
-  const { isAuth, user } = useSelector((state) => state.auth);
+  const { activatedUser, isAuth } = useSelector((state) => state.auth);
   return (
     <Route
       {...rest}
@@ -125,7 +125,7 @@ const ProtectedRoute = ({ children, ...rest }) => {
               state: { from: location },
             }}
           />
-        ) : isAuth && !user.activated ? (
+        ) : isAuth && !activatedUser.user.activated ? (
           <Redirect
             to={{
               pathname: "/activate",

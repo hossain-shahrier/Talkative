@@ -5,6 +5,7 @@ export const authSlice = createSlice({
   initialState: {
     isAuth: false,
     isRegistered: false,
+    activatedUser: null,
     user: {
       username: "",
       password: "",
@@ -24,9 +25,10 @@ export const authSlice = createSlice({
       state.user.phone = phone;
       state.isRegistered = true;
     },
+
     setAuth: (state, action) => {
-      const { user } = action.payload;
-      state.user = user;
+      const { data } = action.payload;
+      state.activatedUser = data;
       state.isAuth = true;
     },
     setOTP: (state, action) => {
@@ -41,6 +43,7 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setUser, setAuth, setOTP, setPhone } = authSlice.actions;
+export const { setUser, setAuth, setOTP, setPhone, setActivation } =
+  authSlice.actions;
 
 export default authSlice.reducer;

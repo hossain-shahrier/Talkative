@@ -13,4 +13,5 @@ const api = axios.create({
 export const register = (data) => api.post("/api/register", data);
 export const sendOTP = (data) => api.post("/api/send-otp", data);
 export const verifyOTP = (data) => api.post("/api/verify-otp", data);
+export const activate = (data) => api.post("/api/activate", data);
 export default api;
