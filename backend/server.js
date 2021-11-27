@@ -2,11 +2,14 @@ const DBConnect = require("./database");
 const router = require("./routes");
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+
+const app = express();
+
+app.use(cookieParser());
 require("dotenv").config();
 // PORT Declaration
 const PORT = process.env.PORT || 5000;
-
-const app = express();
 
 const corsOption = {
   credentials: true,
