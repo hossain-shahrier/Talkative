@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
-
+import { activate } from "../../../http";
 import styled from "styled-components";
 import { verifyOTP } from "../../../http";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { setAuth } from "../../../store/authSlice";
 const Container = styled.div``;
 
 const LeftContainer = styled.div`
@@ -45,7 +47,9 @@ const Button = styled.button`
 `;
 const RightContainer = styled.div``;
 
-const StepOtp = ({ onNext }) => {
+const StepOtp = () => {
+  // Redux
+  const dispatch = useDispatch();
   const [otp, setOtp] = useState("");
   const [errorMessage, setErrorMessage] = useState({
     message: "",
@@ -54,6 +58,7 @@ const StepOtp = ({ onNext }) => {
   const { phone, username, email, password } = useSelector(
     (state) => state.auth.user
   );
+
   const { hash } = useSelector((state) => state.auth.otp);
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -71,7 +76,19 @@ const StepOtp = ({ onNext }) => {
         hash,
       })
         .then((data) => {
-          console.log(data);
+          try {
+            activate({ username, email, phone })
+              .then((user) => {
+                console.log(user);
+                dispatch(setAuth(user));
+                history.push("/rooms");
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          } catch (error) {
+            console.log(error);
+          }
         })
         .catch((err) => {
           setErrorMessage({
