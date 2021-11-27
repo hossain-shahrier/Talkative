@@ -13,9 +13,14 @@ import Rooms from "./pages/rooms/Rooms";
 import Auth from "./pages/authenticate/Auth";
 
 import { useSelector } from "react-redux";
+import { useLoadingWithRefresh } from "./hooks/useLoadingWithRefresh";
 
 function App() {
-  return (
+  // Call refresh endpoint
+  const { loading } = useLoadingWithRefresh();
+  return loading ? (
+    "loading"
+  ) : (
     <div className="container">
       <Router>
         <Navigation />
@@ -125,7 +130,7 @@ const ProtectedRoute = ({ children, ...rest }) => {
               state: { from: location },
             }}
           />
-        ) : isAuth && !activatedUser.user.activated ? (
+        ) : isAuth && !activatedUser.activated ? (
           <Redirect
             to={{
               pathname: "/activate",
