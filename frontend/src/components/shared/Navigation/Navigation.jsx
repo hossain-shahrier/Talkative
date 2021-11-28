@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
 import { logout } from "../../../http";
-import { useDispatch } from "react-redux";
-import { setAuth } from "../../store/authSlice";
+import { setAuth } from "../../../store/authSlice";
+// import { useHistory } from "react-router-dom";
 
 const Container = styled.div`
   font-family: "Lora", serif;
@@ -17,6 +19,17 @@ const Container = styled.div`
 const Logo = styled.span`
   font-size: 22px;
 `;
+const AccountContainer = styled.div`
+  display: flex;
+  align-items: center;
+  width: 20%;
+  justify-content: space-between;
+`;
+const Name = styled.span`
+  padding-top: 5px;
+  font-size: 14px;
+  font-weight: 300;
+`;
 const Button = styled.button`
   font-family: "Open Sans", sans-serif;
   background-color: #639fab;
@@ -29,16 +42,19 @@ const Button = styled.button`
   }
 `;
 const Navigation = () => {
-  const dispatch = useDispatch();
+  // const history = useHistory();
 
-  const logoutUser = async () => {
+  const dispatch = useDispatch();
+  const { isAuth, user } = useSelector((state) => state.auth);
+
+  async function logoutUser() {
     try {
-      const data = await logout();
+      const { data } = await logout();
       dispatch(setAuth(data));
-    } catch (error) {
-      console.error(error.message);
+    } catch (err) {
+      console.log(err);
     }
-  };
+  }
   return (
     <Container>
       <NavLink
@@ -53,7 +69,18 @@ const Navigation = () => {
         }}
       >
         <Logo>Talkative</Logo>
-        <Button onClick={logoutUser()}>Logout</Button>
+        {isAuth && (
+          <AccountContainer>
+            <Name>{user?.username}</Name>
+            <Button
+              onClick={() => {
+                logoutUser();
+              }}
+            >
+              Logout
+            </Button>
+          </AccountContainer>
+        )}
       </NavLink>
     </Container>
   );

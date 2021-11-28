@@ -1,6 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import axios from "axios";
-import { useState } from "react";
-import { useEffect } from "react/cjs/react.development";
+import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setAuth } from "../store/authSlice";
 export function useLoadingWithRefresh() {
@@ -9,7 +9,7 @@ export function useLoadingWithRefresh() {
   useEffect(() => {
     (async () => {
       try {
-        const data = await axios.get(
+        const { data } = await axios.get(
           `${process.env.REACT_APP_API_URL}/api/refresh`,
           {
             withCredentials: true,
@@ -22,6 +22,6 @@ export function useLoadingWithRefresh() {
         setLoading(false);
       }
     })();
-  });
+  }, []);
   return { loading };
 }

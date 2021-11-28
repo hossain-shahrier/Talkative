@@ -33,7 +33,7 @@ class AuthController {
               phone,
             });
           } catch (err) {
-            res.status(500).json({ message: "message sending failed" });
+            return res.status(500).json({ message: "message sending failed" });
           }
           res.json({ hash: hash });
         } else {
@@ -54,12 +54,12 @@ class AuthController {
     }
     const [hashedOTP, expires] = hash.split(".");
     if (Date.now() > +expires) {
-      res.status(400).json({ message: "Sorry, This OTP is Expired." });
+       res.status(400).json({ message: "Sorry, This OTP is Expired." });
     } else {
       const data = `${phone}.${otp}.${expires}`;
       const isValid = OtpService.verifyOtp(hashedOTP, data);
       if (!isValid) {
-        res.status(400).json({ message: "Invalid OTP Number!" });
+         res.status(400).json({ message: "Invalid OTP Number!" });
       } else {
         // Database Service
         try {
@@ -84,7 +84,7 @@ class AuthController {
               httpOnly: true,
             });
             const userDtos = new UserDtos(user);
-            res.json({ user: userDtos, auth: true });
+            return res.json({ user: userDtos, auth: true });
           });
         } catch (err) {
           console.log(err);
@@ -108,7 +108,7 @@ class AuthController {
           user: { username, email, password, phone },
         });
       } else {
-        res.status(400).json({ message: "User already registered" });
+        return res.status(400).json({ message: "User already registered" });
       }
     } catch (err) {
       console.log(err);
@@ -167,6 +167,15 @@ class AuthController {
     // response
     const userDtos = new UserDtos(user);
     res.json({ user: userDtos, auth: true });
+  }
+  async logout(req, res) {
+    const { refreshToken } = req.cookies;
+    // delete refresh token from database
+    await TokenService.removeToken(refreshToken);
+    // Delete cookies
+    res.clearCookie("refreshToken");
+    res.clearCookie("accessToken");
+    res.json({ user: null, auth: false });
   }
 }
 module.exports = new AuthController();

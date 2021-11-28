@@ -17,6 +17,7 @@ export const activate = (data) => api.post("/api/activate", data);
 export const logout = (data) => api.post("/api/logout", data);
 
 // Intercepters
+
 api.interceptors.response.use(
   (config) => {
     return config;
@@ -33,9 +34,10 @@ api.interceptors.response.use(
         await axios.get(`${process.env.REACT_APP_API_URL}/api/refresh`, {
           withCredentials: true,
         });
+
         return api.request(originalRequest);
-      } catch (error) {
-        console.error(error.message);
+      } catch (err) {
+        console.log(err.message);
       }
     }
     throw error;
