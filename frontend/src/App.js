@@ -14,12 +14,12 @@ import Auth from "./pages/authenticate/Auth";
 
 import { useSelector } from "react-redux";
 import { useLoadingWithRefresh } from "./hooks/useLoadingWithRefresh";
-
+import Loader from "./components/shared/Loader/Loader";
 function App() {
   // Call refresh endpoint
   const { loading } = useLoadingWithRefresh();
   return loading ? (
-    "loading"
+    <Loader message="Loading, Please wait..." />
   ) : (
     <div className="container">
       <Router>
