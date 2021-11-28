@@ -78,8 +78,9 @@ const StepOtp = () => {
         .then(() => {
           try {
             activate({ username, email, phone })
-              .then((user) => {
-                dispatch(setAuth(user));
+              .then((userData) => {
+                const { data } = userData;
+                dispatch(setAuth(data));
                 history.push("/rooms");
               })
               .catch((err) => {

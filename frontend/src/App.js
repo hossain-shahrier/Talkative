@@ -37,8 +37,8 @@ function App() {
             <Auth />
           </RegisteredRoute>
           {/* Semi-Protected */}
-          {/* <SemiProtectedRoute path="/activate" exact>
-            <Activate />
+          {/* <SemiProtectedRoute path="/register" exact>
+            <Register />
           </SemiProtectedRoute> */}
           {/* Protected */}
           <ProtectedRoute path="/rooms" exact>
@@ -91,7 +91,7 @@ const RegisteredRoute = ({ children, ...rest }) => {
   );
 };
 // const SemiProtectedRoute = ({ children, ...rest }) => {
-//   const { activatedUser, isAuth } = useSelector((state) => state.auth);
+//   const { user, isAuth } = useSelector((state) => state.auth);
 //   return (
 //     <Route
 //       {...rest}
@@ -99,11 +99,11 @@ const RegisteredRoute = ({ children, ...rest }) => {
 //         !isAuth ? (
 //           <Redirect
 //             to={{
-//               pathname: "/register",
+//               pathname: "/",
 //               state: { from: location },
 //             }}
 //           />
-//         ) : isAuth && !activatedUser.activated ? (
+//         ) : isAuth && !user.activated ? (
 //           children
 //         ) : (
 //           <Redirect
@@ -118,7 +118,7 @@ const RegisteredRoute = ({ children, ...rest }) => {
 //   );
 // };
 const ProtectedRoute = ({ children, ...rest }) => {
-  const { activatedUser, isAuth } = useSelector((state) => state.auth);
+  const { user, isAuth } = useSelector((state) => state.auth);
   return (
     <Route
       {...rest}
@@ -126,14 +126,14 @@ const ProtectedRoute = ({ children, ...rest }) => {
         !isAuth ? (
           <Redirect
             to={{
-              pathname: "/register",
+              pathname: "/",
               state: { from: location },
             }}
           />
-        ) : isAuth && !activatedUser.activated ? (
+        ) : isAuth && !user ? (
           <Redirect
             to={{
-              pathname: "/activate",
+              pathname: "/register",
               state: { from: location },
             }}
           />
