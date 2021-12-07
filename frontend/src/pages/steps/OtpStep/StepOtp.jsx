@@ -6,13 +6,20 @@ import { verifyOTP } from "../../../http";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { setAuth } from "../../../store/authSlice";
-const Container = styled.div``;
+import Loader from "../../../components/shared/Loader/Loader";
+const Container = styled.div`
+  font-family: "Open Sans", sans-serif;
+  display: flex;
+  align-items: center;
 
-const LeftContainer = styled.div`
+  height: 80vh;
+  width: 80vw;
+`;
+const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
 `;
-const LeftContainerTitle = styled.span`
+const Title = styled.span`
   font-size: xx-large;
   margin-bottom: 10px;
 `;
@@ -45,12 +52,12 @@ const Button = styled.button`
   }
   margin-bottom: 10px;
 `;
-const RightContainer = styled.div``;
 
 const StepOtp = () => {
   // Redux
   const dispatch = useDispatch();
   const [otp, setOtp] = useState("");
+  const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState({
     message: "",
   });
@@ -62,6 +69,7 @@ const StepOtp = () => {
   const { hash } = useSelector((state) => state.auth.otp);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (otp.length === 0) {
       setErrorMessage({
         message: "OTP is required",
@@ -84,7 +92,12 @@ const StepOtp = () => {
                 history.push("/rooms");
               })
               .catch((err) => {
-                console.log(err);
+                setErrorMessage({
+                  message: err.response.data.message,
+                });
+              })
+              .finally(() => {
+                setLoading(false);
               });
           } catch (error) {
             console.log(error);
@@ -94,15 +107,17 @@ const StepOtp = () => {
           setErrorMessage({
             message: err.response.data.message,
           });
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   };
+  if (loading) return <Loader message="Account activation is in Process..." />;
   return (
     <Container>
-      <LeftContainer>
-        <LeftContainerTitle>
-          Enter the code, we have just texted you
-        </LeftContainerTitle>
+      <Wrapper>
+        <Title>Enter the code, we have just texted you</Title>
         <OTPInput
           type="number"
           name="otp"
@@ -117,8 +132,7 @@ const StepOtp = () => {
           By entering your number, you're agreeing to our Terms of Service and
           Privacy Policy.
         </BottomParagraph>
-      </LeftContainer>
-      <RightContainer></RightContainer>
+      </Wrapper>
     </Container>
   );
 };

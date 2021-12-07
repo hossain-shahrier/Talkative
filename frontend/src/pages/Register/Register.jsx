@@ -5,6 +5,7 @@ import { useState } from "react";
 import { sendOTP } from "../../http";
 import { useDispatch } from "react-redux";
 import { setUser, setOTP } from "../../store/authSlice";
+import Loader from "../../components/shared/Loader/Loader";
 const Container = styled.div`
   font-family: "Open Sans", sans-serif;
   display: flex;
@@ -97,6 +98,7 @@ const RightContainerImage = styled.img`
 const Register = () => {
   // Redux
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   // Form Handling
   const history = useHistory();
   const [errorMessage, setErrorMessage] = useState({
@@ -122,7 +124,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     if (
       inputs.username === "" ||
       inputs.password === "" ||
@@ -163,9 +165,13 @@ const Register = () => {
           setErrorMessage({
             message: err.response.data.message,
           });
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   };
+  if (loading) return <Loader message="Sending OTP in Process..." />;
   return (
     <Container>
       <LeftContainer>
