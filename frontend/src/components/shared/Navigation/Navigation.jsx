@@ -15,10 +15,15 @@ const Container = styled.div`
   width: 100%;
   height: 80px;
   max-width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
+const LogoContainer = styled.div``;
 const Logo = styled.span`
   font-size: 22px;
 `;
+
 const AccountContainer = styled.div`
   display: flex;
   align-items: center;
@@ -57,31 +62,32 @@ const Navigation = () => {
   }
   return (
     <Container>
-      <NavLink
-        to="/"
-        style={{
-          textDecoration: "none",
-          color: "#000000",
-          fontWeight: "bold",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <Logo>Talkative</Logo>
-        {isAuth && (
-          <AccountContainer>
+      <LogoContainer>
+        <NavLink
+          to="/"
+          style={{
+            textDecoration: "none",
+            color: "#000000",
+            fontWeight: "bold",
+          }}
+        >
+          <Logo>Talkative</Logo>
+        </NavLink>
+      </LogoContainer>
+      {isAuth && (
+        <AccountContainer>
+          <NavLink to={user._id}>
             <Name>{user?.username}</Name>
-            <Button
-              onClick={() => {
-                logoutUser();
-              }}
-            >
-              Logout
-            </Button>
-          </AccountContainer>
-        )}
-      </NavLink>
+          </NavLink>
+          <Button
+            onClick={() => {
+              logoutUser();
+            }}
+          >
+            Logout
+          </Button>
+        </AccountContainer>
+      )}
     </Container>
   );
 };

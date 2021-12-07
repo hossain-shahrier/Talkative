@@ -15,6 +15,7 @@ import Auth from "./pages/authenticate/Auth";
 import { useSelector } from "react-redux";
 import { useLoadingWithRefresh } from "./hooks/useLoadingWithRefresh";
 import Loader from "./components/shared/Loader/Loader";
+import User from "./pages/user/User";
 function App() {
   // Call refresh endpoint
   const { loading } = useLoadingWithRefresh();
@@ -43,6 +44,9 @@ function App() {
           {/* Protected */}
           <ProtectedRoute path="/rooms" exact>
             <Rooms />
+          </ProtectedRoute>
+          <ProtectedRoute path="/:id" exact>
+            <User />
           </ProtectedRoute>
         </Switch>
       </Router>
